@@ -1,0 +1,124 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import SectionHeading from './SectionHeading.astro';
+import { works, workCategories } from '../data/works';
+
+// works配下の画像をまとめて取り込み、ファイル名で引けるようにする
+const imageModules = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/images/works/*.{jpg,jpeg,png,webp}',
+  { eager: true }
+);
+const imageMap: Record<string, ImageMetadata> = {};
+for (const [path, mod] of Object.entries(imageModules)) {
+  const file = path.split('/').pop()!;
+  imageMap[file] = mod.default;
+}
+---
+
+<section id="works" class="py-16 md:py-24 scroll-mt-20">
+  <div class="mx-auto max-w-6xl px-4">
+    <SectionHeading eyebrow="WORKS" title="施工事例" />
+    <p class="fade-in mt-6 text-center text-ink/80 leading-relaxed">
+      実際に手がけたお庭です。左が施工前、右が施工後です。
+    </p>
+
+    {/* カテゴリ絞り込み */}
+    <div class="fade-in mt-8 flex flex-wrap justify-center gap-2" role="group" aria-label="施工事例のカテゴリ絞り込み">
+      {
+        workCategories.map((c, i) => (
+          <button
+            type="button"
+            class="work-filter rounded-full border border-green-light/50 px-4 py-2 text-sm font-bold text-green-deep hover:bg-green-light/15 transition data-[active=true]:bg-green-deep data-[active=true]:text-white data-[active=true]:border-green-deep"
+            data-filter={c.key}
+            data-active={i === 0 ? 'true' : 'false'}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+          >
+            {c.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="mt-10 grid gap-6 sm:grid-cols-2">
+      {
+        works.map((w) => {
+          const before = imageMap[w.before];
+          const after = imageMap[w.after];
+          return (
+            <article
+              class="work-item fade-in bg-white rounded-2xl overflow-hidden shadow-sm ring-1 ring-green-light/15"
+              data-category={w.category}
+            >
+              <div class="grid grid-cols-2 gap-px bg-green-light/20">
+                <figure class="relative bg-white">
+                  {before && (
+                    <Image
+                      src={before}
+                      alt={`${w.title}（施工前）`}
+                      class="w-full h-40 md:h-48 object-cover"
+                      widths={[320, 500]}
+                      sizes="(max-width: 640px) 50vw, 250px"
+                      loading="lazy"
+                    />
+                  )}
+                  <figcaption class="absolute top-2 left-2 rounded bg-ink/70 text-white text-xs px-2 py-0.5">
+                    Before
+                  </figcaption>
+                </figure>
+                <figure class="relative bg-white">
+                  {after && (
+                    <Image
+                      src={after}
+                      alt={`${w.title}（施工後）`}
+                      class="w-full h-40 md:h-48 object-cover"
+                      widths={[320, 500]}
+                      sizes="(max-width: 640px) 50vw, 250px"
+                      loading="lazy"
+                    />
+                  )}
+                  <figcaption class="absolute top-2 left-2 rounded bg-accent text-white text-xs px-2 py-0.5">
+                    After
+                  </figcaption>
+                </figure>
+              </div>
+              <div class="p-5">
+                <div class="flex items-center gap-2">
+                  <span class="rounded bg-green-light/15 text-green-deep text-xs font-bold px-2 py-0.5">
+                    {w.categoryLabel}
+                  </span>
+                  <span class="text-ink/60 text-xs">{w.location}</span>
+                </div>
+                <h3 class="mt-2 font-heading font-bold text-lg text-green-deep">{w.title}</h3>
+                <p class="mt-1 text-ink/85 text-sm leading-relaxed">{w.description}</p>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+
+    <p class="mt-8 text-center text-ink/60 text-sm">
+      ※ 写真はイメージです。実際の施工写真に差し替えてご利用ください。
+    </p>
+  </div>
+</section>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.work-filter');
+  const items = document.querySelectorAll<HTMLElement>('.work-item');
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+      buttons.forEach((b) => {
+        const active = b === btn;
+        b.dataset.active = String(active);
+        b.setAttribute('aria-pressed', String(active));
+      });
+      items.forEach((item) => {
+        const show = filter === 'all' || item.dataset.category === filter;
+        item.style.display = show ? '' : 'none';
+      });
+    });
+  });
+</script>

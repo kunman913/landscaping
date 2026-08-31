@@ -1,0 +1,30 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { reasons } from '../data/reasons';
+---
+
+<section id="reasons" class="py-16 md:py-24 scroll-mt-20">
+  <div class="mx-auto max-w-6xl px-4">
+    <SectionHeading eyebrow="REASONS" title="選ばれる4つの理由" />
+
+    <div class="mt-10 md:mt-14 grid gap-5 sm:grid-cols-2">
+      {
+        reasons.map((r, i) => (
+          <div class="fade-in bg-white rounded-2xl p-6 md:p-8 shadow-sm ring-1 ring-green-light/15">
+            <div class="flex items-start gap-4">
+              <span class="shrink-0 w-10 h-10 rounded-full bg-green-deep text-white font-heading font-bold flex items-center justify-center">
+                {i + 1}
+              </span>
+              <div>
+                <h3 class="font-heading font-bold text-lg md:text-xl text-green-deep">
+                  {r.title}
+                </h3>
+                <p class="mt-2 text-ink/90 leading-relaxed">{r.body}</p>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

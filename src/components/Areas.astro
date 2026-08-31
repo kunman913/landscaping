@@ -1,0 +1,32 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { areaList } from '../data/areas';
+---
+
+<section id="areas" class="py-16 md:py-24 scroll-mt-20">
+  <div class="mx-auto max-w-3xl px-4">
+    <SectionHeading eyebrow="AREA" title="対応エリア" />
+
+    <div class="fade-in mt-10 space-y-4 text-ink/90 leading-relaxed">
+      <p>
+        埼玉県坂戸市を拠点に、埼玉県全域と東京都練馬区・板橋区に伺っています。
+      </p>
+      <p>
+        上記以外の地域でも、まずはご相談ください。お伺いできる場合があります。
+      </p>
+    </div>
+
+    <div class="fade-in mt-6">
+      <p class="text-sm text-ink/70">主な対応市町村</p>
+      <ul class="mt-3 flex flex-wrap gap-2">
+        {
+          areaList.map((area) => (
+            <li class="rounded-full bg-white ring-1 ring-green-light/30 px-3 py-1.5 text-sm text-ink/90">
+              {area}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

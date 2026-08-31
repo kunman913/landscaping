@@ -1,0 +1,29 @@
+---
+import { site } from '../data/site';
+---
+
+<!-- スマホでは画面下部に常時固定表示（ブリーフ 1章の鉄則） -->
+<div class="lg:hidden fixed bottom-0 inset-x-0 z-50 p-2 bg-base/95 backdrop-blur border-t border-green-light/40">
+  <div class="flex gap-2 max-w-md mx-auto">
+    <a
+      href={site.telLink}
+      class="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-accent text-white font-bold py-3.5 text-base shadow"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+        ><path
+          d="M6.6 10.8a15.5 15.5 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11.4 11.4 0 003.6.58 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.4 11.4 0 00.58 3.6 1 1 0 01-.24 1z"
+        ></path></svg
+      >
+      電話する
+    </a>
+    <a
+      href="#contact"
+      class="inline-flex items-center justify-center gap-2 rounded-full bg-green-deep text-white font-bold px-5 py-3.5 text-base shadow"
+    >
+      相談
+    </a>
+  </div>
+</div>
+
+<!-- 固定ボタンが本文末尾に被らないよう余白を確保 -->
+<div class="lg:hidden h-20" aria-hidden="true"></div>

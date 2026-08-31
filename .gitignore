@@ -1,0 +1,24 @@
+# build output
+dist/
+.output/
+
+# dependencies
+node_modules/
+
+# generated types
+.astro/
+
+# environment (実際のエンドポイント・連絡先はコミットしない)
+.env
+.env.production
+
+# 依頼内容メモ（連絡先を含むためリポジトリには含めない）
+meiji-zouen-brief.md
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# macOS
+.DS_Store

@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Reasons from '../components/Reasons.astro';
+import Services from '../components/Services.astro';
+import Works from '../components/Works.astro';
+import Flow from '../components/Flow.astro';
+import About from '../components/About.astro';
+import Pricing from '../components/Pricing.astro';
+import Areas from '../components/Areas.astro';
+import Faq from '../components/Faq.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import StickyCallButton from '../components/StickyCallButton.astro';
+---
+
+<BaseLayout>
+  <Header />
+  <main id="main">
+    <Hero />
+    <Reasons />
+    <Services />
+    <Works />
+    <Flow />
+    <About />
+    <Pricing />
+    <Areas />
+    <Faq />
+    <Contact />
+  </main>
+  <Footer />
+  <StickyCallButton />
+</BaseLayout>
+
+<script>
+  // スクロールで写真・要素がふわっと出る（控えめ）。
+  // prefers-reduced-motion 時は CSS 側で無効化され、ここでも即表示にする。
+  const els = document.querySelectorAll('.fade-in');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (reduce || !('IntersectionObserver' in window)) {
+    els.forEach((el) => el.classList.add('is-visible'));
+  } else {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: '0px 0px -10% 0px', threshold: 0.05 }
+    );
+    els.forEach((el) => io.observe(el));
+  }
+</script>

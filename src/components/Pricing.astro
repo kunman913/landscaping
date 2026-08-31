@@ -1,0 +1,28 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { site } from '../data/site';
+---
+
+<section id="pricing" class="py-16 md:py-24 bg-green-deep/[0.04] scroll-mt-20">
+  <div class="mx-auto max-w-3xl px-4">
+    <SectionHeading eyebrow="PRICE" title="料金について" />
+
+    <div class="fade-in mt-10 space-y-5 text-ink/90 leading-relaxed">
+      <p>
+        作業前に必ずお見積りをお出しし、ご了承いただいてから着手します。あとから追加請求をすることはありません。
+      </p>
+      <p>
+        料金は木の高さ・本数・お庭の状況・出るゴミの量によって変わります。写真だけでは正確にお出しできないため、まず現地を見せていただいた上でお伝えしています。<strong class="text-green-deep">お見積りは無料です。</strong>
+      </p>
+    </div>
+
+    <div class="fade-in mt-8 text-center">
+      <a
+        href={site.telLink}
+        class="inline-flex items-center justify-center gap-2 rounded-full bg-accent text-white font-bold px-6 py-4 shadow hover:brightness-110 transition"
+      >
+        無料お見積りのお電話｜{site.tel}
+      </a>
+    </div>
+  </div>
+</section>

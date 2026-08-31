@@ -1,0 +1,93 @@
+---
+import { site, navItems } from '../data/site';
+---
+
+<header class="sticky top-0 z-40 bg-base/95 backdrop-blur border-b border-green-light/30">
+  <div class="mx-auto max-w-6xl px-4 h-16 md:h-20 flex items-center justify-between gap-4">
+    <a href="#top" class="flex items-center gap-2 shrink-0" aria-label="めいじ造園 トップへ">
+      <span class="font-heading text-xl md:text-2xl font-bold text-green-deep tracking-wide">
+        めいじ造園
+      </span>
+    </a>
+
+    <!-- PCナビ -->
+    <nav class="hidden lg:block" aria-label="メインナビゲーション">
+      <ul class="flex items-center gap-5 text-sm">
+        {
+          navItems.map((item) => (
+            <li>
+              <a href={item.href} class="text-ink/80 hover:text-green-deep transition-colors py-2">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a
+        href={site.telLink}
+        class="hidden sm:inline-flex items-center gap-2 rounded-full bg-accent text-white font-bold px-4 py-2 text-sm hover:brightness-110 transition"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+          ><path
+            d="M6.6 10.8a15.5 15.5 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11.4 11.4 0 003.6.58 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.4 11.4 0 00.58 3.6 1 1 0 01-.24 1z"
+          ></path></svg
+        >
+        お電話はこちら
+      </a>
+
+      <!-- モバイル用メニュー開閉 -->
+      <button
+        type="button"
+        id="menu-toggle"
+        class="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded text-green-deep"
+        aria-label="メニューを開く"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"
+          ><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"></path></svg
+        >
+      </button>
+    </div>
+  </div>
+
+  <!-- モバイルメニュー -->
+  <nav
+    id="mobile-menu"
+    class="lg:hidden hidden border-t border-green-light/30 bg-base"
+    aria-label="モバイルナビゲーション"
+  >
+    <ul class="px-4 py-2 divide-y divide-green-light/15">
+      {
+        navItems.map((item) => (
+          <li>
+            <a href={item.href} class="block py-3 text-ink/90 hover:text-green-deep" data-menu-link>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  if (toggle && menu) {
+    const close = () => {
+      menu.classList.add('hidden');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'メニューを開く');
+    };
+    toggle.addEventListener('click', () => {
+      const open = menu.classList.toggle('hidden');
+      toggle.setAttribute('aria-expanded', String(!open));
+      toggle.setAttribute('aria-label', open ? 'メニューを開く' : 'メニューを閉じる');
+    });
+    menu.querySelectorAll('[data-menu-link]').forEach((a) => a.addEventListener('click', close));
+  }
+</script>

@@ -1,0 +1,28 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { flowSteps } from '../data/flow';
+---
+
+<section id="flow" class="py-16 md:py-24 bg-green-deep/[0.04] scroll-mt-20">
+  <div class="mx-auto max-w-3xl px-4">
+    <SectionHeading eyebrow="FLOW" title="施工までの流れ" />
+
+    <ol class="mt-10 md:mt-14 relative border-l-2 border-green-light/40 ml-4 space-y-8">
+      {
+        flowSteps.map((step, i) => (
+          <li class="fade-in relative pl-8">
+            <span class="absolute -left-[1.35rem] top-0 w-9 h-9 rounded-full bg-green-deep text-white font-heading font-bold flex items-center justify-center ring-4 ring-base">
+              {i + 1}
+            </span>
+            <h3 class="font-heading font-bold text-lg md:text-xl text-green-deep">{step.title}</h3>
+            <p class="mt-1 text-ink/90 leading-relaxed">{step.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <p class="fade-in mt-10 rounded-2xl bg-white ring-1 ring-green-light/20 p-5 text-center text-ink/90">
+      お見積り後にお断りいただいても、費用は一切かかりません。
+    </p>
+  </div>
+</section>

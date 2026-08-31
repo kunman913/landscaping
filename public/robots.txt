@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://meiji-zouen.pages.dev/sitemap-index.xml

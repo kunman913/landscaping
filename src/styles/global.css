@@ -1,0 +1,61 @@
+/* ブランドカラーを CSS変数としても保持（Tailwind外で使う箇所用） */
+:root {
+  --color-base: #FBFAF6;
+  --color-green-deep: #2E4A34;
+  --color-green-light: #7A9367;
+  --color-accent: #C1732B;
+  --color-ink: #2A2A26;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* 固定ヘッダー分のアンカーオフセット */
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-base);
+  color: var(--color-ink);
+  font-family: '"Noto Sans JP"', sans-serif;
+  line-height: 1.8;
+  font-size: 16px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* スクロールで写真がふわっと出る演出（ブリーフの指定どおり控えめ） */
+.fade-in {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  will-change: opacity, transform;
+}
+.fade-in.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* フォーカスリング（キーボード操作の視認性） */
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* アニメーションを好まない利用者には演出を無効化 */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .fade-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

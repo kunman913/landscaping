@@ -1,0 +1,18 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  align?: 'left' | 'center';
+}
+const { eyebrow, title, align = 'center' } = Astro.props;
+---
+
+<div class={`fade-in ${align === 'center' ? 'text-center' : 'text-left'}`}>
+  {eyebrow && (
+    <p class="text-green-light font-bold tracking-widest text-sm mb-2">{eyebrow}</p>
+  )}
+  <h2 class="font-heading font-bold text-2xl md:text-3xl text-green-deep leading-relaxed">
+    {title}
+  </h2>
+  <div class={`mt-4 h-px bg-green-light/40 ${align === 'center' ? 'mx-auto w-16' : 'w-16'}`}></div>
+</div>

@@ -1,0 +1,27 @@
+---
+import type { Service } from '../data/services';
+interface Props {
+  name: Service['icon'];
+}
+const { name } = Astro.props;
+---
+
+{/* 木・剪定・庭にちなんだ簡素なラインアイコン */}
+{name === 'shears' && (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><path d="M8 7.5 20 17M8 16.5 20 7"/></svg>
+)}
+{name === 'saw' && (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15h13l4-4"/><path d="M3 15v3h13"/><path d="M6 15v2M9 15v2M12 15v2"/></svg>
+)}
+{name === 'grass' && (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6"/><path d="M12 14c-2-2-4-2-5-5 3 0 4 1 5 3"/><path d="M12 14c2-2 4-2 5-5-3 0-4 1-5 3"/><path d="M4 20h16"/></svg>
+)}
+{name === 'sheet' && (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="12" rx="1"/><path d="M4 10h16M4 14h16M9 6v12M15 6v12"/></svg>
+)}
+{name === 'lawn' && (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h16"/><path d="M6 18v-3M10 18v-4M14 18v-4M18 18v-3"/><path d="M4 14c4-3 12-3 16 0"/></svg>
+)}
+{name === 'spray' && (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 8h5v10a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2z"/><path d="M9 10h5"/><path d="M14 6h3M17 4v4"/><path d="M6 5h3v3H6z"/></svg>
+)}
