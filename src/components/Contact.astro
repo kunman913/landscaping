@@ -26,7 +26,7 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
           <p class="text-ink/70 text-sm">メールでのご相談</p>
           <p class="mt-1 font-bold text-green-deep">お問い合わせフォームへ</p>
           <p class="mt-2 text-ink/70 text-sm">
-            メールでのご相談はフォームで承っています。お庭の写真も添付いただけます。
+            メールでのご相談はフォームで承っています。まずはお気軽にご相談ください。
           </p>
         </div>
       </div>
@@ -37,7 +37,6 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
         class="fade-in md:col-span-3 rounded-2xl bg-white ring-1 ring-green-light/20 p-6 space-y-4"
         action={formEndpoint}
         method="POST"
-        enctype="multipart/form-data"
       >
         {
           !formEndpoint && (
@@ -95,12 +94,9 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
             class="mt-1 w-full rounded-lg border border-green-light/40 px-3 py-2.5 focus:border-green-deep outline-none aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-1 aria-[invalid=true]:ring-red-500"></textarea>
         </div>
 
-        <div>
-          <label for="photo" class="block text-sm font-bold text-ink/90">写真添付（任意）</label>
-          <input id="photo" name="photo" type="file" accept="image/*" multiple
-            class="mt-1 w-full text-sm text-ink/80 file:mr-3 file:rounded-full file:border-0 file:bg-green-light/15 file:px-4 file:py-2 file:text-green-deep file:font-bold" />
-          <p class="mt-1 text-xs text-ink/60">お庭の様子がわかる写真があると、お見積りがスムーズです。</p>
-        </div>
+        <p class="text-xs text-ink/60">
+          お庭の写真は、お電話または現地調査の際にお見せください。お見積りがスムーズになります。
+        </p>
 
         <button
           id="contact-submit"
