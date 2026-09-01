@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import SectionHeading from './SectionHeading.astro';
 import { site } from '../data/site';
 import ownerImage from '../assets/images/owner.jpg';
+import logoMark from '../assets/images/logo-mark.png';
 ---
 
 <section id="about" class="py-16 md:py-24 scroll-mt-20">
@@ -22,7 +23,17 @@ import ownerImage from '../assets/images/owner.jpg';
         <p class="mt-3 text-center text-ink/70 text-sm">代表 {site.owner}（{site.ownerKana}）</p>
       </div>
 
-      <div class="fade-in md:col-span-3">
+      <div class="fade-in md:col-span-3 relative">
+        {/* ロゴの透かし背景（テキスト側の中央に配置） */}
+        <Image
+          src={logoMark}
+          alt=""
+          aria-hidden="true"
+          width={480}
+          height={480}
+          class="pointer-events-none select-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[16rem] md:w-[22rem] max-w-none opacity-[0.05] z-0"
+        />
+        <div class="relative z-10">
         <p class="font-heading font-bold text-xl md:text-2xl text-green-deep leading-relaxed">
           はじめまして、めいじ造園の山口明治です。
         </p>
@@ -49,6 +60,7 @@ import ownerImage from '../assets/images/owner.jpg';
               ))
             }
           </ul>
+        </div>
         </div>
       </div>
     </div>
