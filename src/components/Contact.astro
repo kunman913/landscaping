@@ -75,9 +75,31 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
         </div>
 
         <div>
-          <label for="email" class="block text-sm font-bold text-ink/90">メールアドレス</label>
+          <label for="email" class="block text-sm font-bold text-ink/90">
+            メールアドレス
+            <span id="email-required-badge" class="hidden text-accent">必須</span>
+          </label>
           <input id="email" name="email" type="email" autocomplete="email" maxlength="254"
             class="mt-1 w-full rounded-lg border border-green-light/40 px-3 py-2.5 focus:border-green-deep outline-none aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-1 aria-[invalid=true]:ring-red-500" />
+        </div>
+
+        {/* 写真添付を希望する場合は、折り返しメール用にメールアドレスを必須化する */}
+        <div class="rounded-lg bg-green-deep/[0.04] ring-1 ring-green-light/20 p-3">
+          <label class="flex items-start gap-2.5 cursor-pointer">
+            <input
+              type="checkbox"
+              id="photo-wanted"
+              name="写真添付希望"
+              value="希望する"
+              class="mt-0.5 h-5 w-5 shrink-0 rounded border-green-light/60 text-green-deep focus:ring-green-deep"
+            />
+            <span class="text-sm text-ink/90">
+              <span class="font-bold text-green-deep">お庭の写真を送りたい（写真添付可）</span><br />
+              <span class="text-ink/70 text-xs">
+                チェックすると、担当から折り返しメールをお送りします。そのメールにお写真を添付いただけます。（メールアドレスが必須になります）
+              </span>
+            </span>
+          </label>
         </div>
 
         <div>
@@ -94,9 +116,6 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
             class="mt-1 w-full rounded-lg border border-green-light/40 px-3 py-2.5 focus:border-green-deep outline-none aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-1 aria-[invalid=true]:ring-red-500"></textarea>
         </div>
 
-        <p class="text-xs text-ink/60">
-          可能な場合、お庭等の写真はこちらからの折り返しメールに添付をお願いします。お見積りがスムーズになります。
-        </p>
 
         <p id="contact-error" role="alert" class="hidden rounded-lg bg-red-50 text-red-700 text-sm p-3">
           送信に失敗しました。お手数ですが、時間をおいて再度お試しいただくか、お電話でご連絡ください。
@@ -151,6 +170,19 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
       el.addEventListener('input', () => {
         if (el.checkValidity()) el.removeAttribute('aria-invalid');
       });
+    });
+
+    // 「写真添付可」チェック時は、折り返しメール用にメールアドレスを必須化
+    const photoWanted = document.getElementById('photo-wanted') as HTMLInputElement | null;
+    const emailInput = document.getElementById('email') as HTMLInputElement | null;
+    const emailBadge = document.getElementById('email-required-badge');
+    photoWanted?.addEventListener('change', () => {
+      const on = photoWanted.checked;
+      if (emailInput) {
+        emailInput.required = on;
+        if (!on) emailInput.removeAttribute('aria-invalid');
+      }
+      emailBadge?.classList.toggle('hidden', !on);
     });
 
     const setBusy = (busy: boolean) => {
