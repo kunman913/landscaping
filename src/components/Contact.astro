@@ -99,18 +99,14 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
             class="mt-1 w-full rounded-lg border border-green-light/40 px-3 py-2.5 focus:border-green-deep outline-none aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-1 aria-[invalid=true]:ring-red-500"></textarea>
         </div>
 
-        {/* 写真添付（FormSubmitは attachment 入力を複数並べると各ファイルを添付する） */}
+        {/* 写真添付（FormSubmitは1枚のみ対応） */}
         <div>
-          <label class="block text-sm font-bold text-ink/90">写真添付（任意・最大3枚）</label>
-          <div class="mt-1 space-y-2">
-            <input aria-label="写真1" name="attachment" type="file" accept="image/*"
-              class="w-full text-sm text-ink/80 file:mr-3 file:rounded-full file:border-0 file:bg-green-light/15 file:px-4 file:py-2 file:text-green-deep file:font-bold" />
-            <input aria-label="写真2" name="attachment" type="file" accept="image/*"
-              class="w-full text-sm text-ink/80 file:mr-3 file:rounded-full file:border-0 file:bg-green-light/15 file:px-4 file:py-2 file:text-green-deep file:font-bold" />
-            <input aria-label="写真3" name="attachment" type="file" accept="image/*"
-              class="w-full text-sm text-ink/80 file:mr-3 file:rounded-full file:border-0 file:bg-green-light/15 file:px-4 file:py-2 file:text-green-deep file:font-bold" />
-          </div>
-          <p class="mt-1 text-xs text-ink/60">お庭の様子がわかる写真があると、お見積りがスムーズです。（テスト中）</p>
+          <label for="photo" class="block text-sm font-bold text-ink/90">写真添付（任意・1枚）</label>
+          <input id="photo" name="attachment" type="file" accept="image/*"
+            class="mt-1 w-full text-sm text-ink/80 file:mr-3 file:rounded-full file:border-0 file:bg-green-light/15 file:px-4 file:py-2 file:text-green-deep file:font-bold" />
+          <p class="mt-1 text-xs text-ink/60">
+            お庭の様子がわかる写真があると、お見積りがスムーズです。写真が複数ある場合は、送信後の折り返しメールに添付してください。
+          </p>
         </div>
 
 
