@@ -98,6 +98,10 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
           可能な場合、お庭等の写真はこちらからの折り返しメールに添付をお願いします。お見積りがスムーズになります。
         </p>
 
+        <p id="contact-error" role="alert" class="hidden rounded-lg bg-red-50 text-red-700 text-sm p-3">
+          送信に失敗しました。お手数ですが、時間をおいて再度お試しいただくか、お電話でご連絡ください。
+        </p>
+
         <button
           id="contact-submit"
           type="submit"
@@ -109,6 +113,25 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
           送信いただいた内容はお問い合わせ対応にのみ使用します。
         </p>
       </form>
+
+      {/* 送信完了メッセージ（初期は非表示。AJAX送信成功時に表示） */}
+      <div
+        id="contact-success"
+        role="status"
+        tabindex="-1"
+        class="hidden md:col-span-3 rounded-2xl bg-green-deep/[0.06] ring-1 ring-green-light/30 p-8 text-center"
+      >
+        <div class="mx-auto w-14 h-14 rounded-full bg-green-deep text-white flex items-center justify-center">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"
+            ><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg
+          >
+        </div>
+        <p class="mt-4 font-heading font-bold text-xl text-green-deep">送信ありがとうございました</p>
+        <p class="mt-2 text-ink/80 leading-relaxed">
+          内容を確認し、折り返しご連絡いたします。<br />
+          お急ぎの場合は、お電話（{site.tel}）でもご相談いただけます。
+        </p>
+      </div>
     </div>
   </div>
 </section>
@@ -116,6 +139,8 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
 <script>
   const form = document.getElementById('contact-form') as HTMLFormElement | null;
   const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement | null;
+  const successPanel = document.getElementById('contact-success');
+  const errorMsg = document.getElementById('contact-error');
 
   if (form) {
     const fields = form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea');
@@ -128,18 +153,46 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
       });
     });
 
-    // 二重送信防止: 検証を通過して実際に送信される時だけボタンを無効化
-    form.addEventListener('submit', () => {
+    const setBusy = (busy: boolean) => {
       if (!submitBtn) return;
-      submitBtn.disabled = true;
-      submitBtn.setAttribute('aria-busy', 'true');
-      submitBtn.textContent = '送信中…';
-      // 送信が失敗して画面が遷移しなかった場合の保険（一定時間後に戻す）
-      window.setTimeout(() => {
-        submitBtn.disabled = false;
+      submitBtn.disabled = busy;
+      if (busy) {
+        submitBtn.setAttribute('aria-busy', 'true');
+        submitBtn.textContent = '送信中…';
+      } else {
         submitBtn.removeAttribute('aria-busy');
         submitBtn.textContent = 'この内容で送信する';
-      }, 10000);
+      }
+    };
+
+    form.addEventListener('submit', async (e) => {
+      // 送信先(Formspree)が未設定なら通常送信に任せる
+      if (!form.getAttribute('action')) return;
+      // ここに到達する時点でブラウザの必須・形式チェックは通過済み
+      e.preventDefault();
+      errorMsg?.classList.add('hidden');
+      setBusy(true);
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        if (!res.ok) throw new Error(`status ${res.status}`);
+
+        // 成功: フォームを隠して完了メッセージを表示
+        form.classList.add('hidden');
+        if (successPanel) {
+          successPanel.classList.remove('hidden');
+          successPanel.focus();
+          successPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } catch {
+        // 失敗: エラーメッセージを出してボタンを戻す
+        errorMsg?.classList.remove('hidden');
+        setBusy(false);
+      }
     });
   }
 </script>
