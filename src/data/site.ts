@@ -9,7 +9,7 @@ const email = import.meta.env.PUBLIC_EMAIL ?? '';
 export const site = {
   name: 'めいじ造園',
   owner: '山口 明治',
-  ownerKana: 'やまぐち めいじ',
+  ownerKana: 'やまぐち あきはる',
   tel,
   // tel: リンクは数字（と先頭+）のみにして確実に発信できるようにする
   telLink: `tel:${tel.replace(/[^0-9+]/g, '')}`,
