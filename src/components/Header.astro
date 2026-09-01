@@ -1,10 +1,20 @@
 ---
+import { Image } from 'astro:assets';
 import { site, navItems } from '../data/site';
+import logoMark from '../assets/images/logo-mark.png';
 ---
 
 <header class="sticky top-0 z-40 bg-base/95 backdrop-blur border-b border-green-light/30">
   <div class="mx-auto max-w-6xl px-4 h-16 md:h-20 flex items-center justify-between gap-4">
-    <a href="#top" class="flex items-center gap-2 shrink-0" aria-label="めいじ造園 トップへ">
+    <a href="#top" class="flex items-center gap-2.5 shrink-0" aria-label="めいじ造園 トップへ">
+      <Image
+        src={logoMark}
+        alt="めいじ造園 ロゴ"
+        class="h-10 w-10 md:h-12 md:w-12"
+        width={96}
+        height={96}
+        loading="eager"
+      />
       <span class="font-heading text-xl md:text-2xl font-bold text-green-deep tracking-wide">
         めいじ造園
       </span>
