@@ -33,6 +33,7 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
 
       {/* フォーム */}
       <form
+        id="contact-form"
         class="fade-in md:col-span-3 rounded-2xl bg-white ring-1 ring-green-light/20 p-6 space-y-4"
         action={formEndpoint}
         method="POST"
@@ -48,34 +49,37 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
 
         <div>
           <label for="name" class="block text-sm font-bold text-ink/90">お名前 <span class="text-accent">必須</span></label>
-          <input id="name" name="name" type="text" required autocomplete="name"
-            class="mt-1 w-full rounded-lg border border-green-light/40 px-3 py-2.5 focus:border-green-deep outline-none" />
+          <input id="name" name="name" type="text" required autocomplete="name" maxlength="50"
+            class="mt-1 w-full rounded-lg border border-green-light/40 px-3 py-2.5 focus:border-green-deep outline-none aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-1 aria-[invalid=true]:ring-red-500" />
         </div>
 
         <div>
           <label for="tel" class="block text-sm font-bold text-ink/90">電話番号 <span class="text-accent">必須</span></label>
           <input id="tel" name="tel" type="tel" required autocomplete="tel"
-            class="mt-1 w-full rounded-lg border border-green-light/40 px-3 py-2.5 focus:border-green-deep outline-none" />
+            inputmode="tel" pattern="[0-9\-]{10,20}" maxlength="20"
+            placeholder="例：090-1234-5678"
+            title="数字とハイフンで入力してください（例：090-1234-5678）"
+            class="mt-1 w-full rounded-lg border border-green-light/40 px-3 py-2.5 focus:border-green-deep outline-none aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-1 aria-[invalid=true]:ring-red-500" />
         </div>
 
         <div>
           <label for="email" class="block text-sm font-bold text-ink/90">メールアドレス</label>
-          <input id="email" name="email" type="email" autocomplete="email"
-            class="mt-1 w-full rounded-lg border border-green-light/40 px-3 py-2.5 focus:border-green-deep outline-none" />
+          <input id="email" name="email" type="email" autocomplete="email" maxlength="254"
+            class="mt-1 w-full rounded-lg border border-green-light/40 px-3 py-2.5 focus:border-green-deep outline-none aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-1 aria-[invalid=true]:ring-red-500" />
         </div>
 
         <div>
           <label for="address" class="block text-sm font-bold text-ink/90">ご住所（市区町村まで）</label>
-          <input id="address" name="address" type="text" autocomplete="address-level2"
+          <input id="address" name="address" type="text" autocomplete="address-level2" maxlength="100"
             placeholder="例：坂戸市○○"
-            class="mt-1 w-full rounded-lg border border-green-light/40 px-3 py-2.5 focus:border-green-deep outline-none" />
+            class="mt-1 w-full rounded-lg border border-green-light/40 px-3 py-2.5 focus:border-green-deep outline-none aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-1 aria-[invalid=true]:ring-red-500" />
         </div>
 
         <div>
           <label for="message" class="block text-sm font-bold text-ink/90">ご相談内容 <span class="text-accent">必須</span></label>
-          <textarea id="message" name="message" rows="5" required
+          <textarea id="message" name="message" rows="5" required maxlength="2000"
             placeholder="例：庭の松を1本、剪定をお願いしたいです。"
-            class="mt-1 w-full rounded-lg border border-green-light/40 px-3 py-2.5 focus:border-green-deep outline-none"></textarea>
+            class="mt-1 w-full rounded-lg border border-green-light/40 px-3 py-2.5 focus:border-green-deep outline-none aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-1 aria-[invalid=true]:ring-red-500"></textarea>
         </div>
 
         <div>
@@ -86,8 +90,9 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
         </div>
 
         <button
+          id="contact-submit"
           type="submit"
-          class="w-full rounded-full bg-accent text-white font-bold py-3.5 text-lg hover:brightness-110 transition"
+          class="w-full rounded-full bg-accent text-white font-bold py-3.5 text-lg hover:brightness-110 transition disabled:opacity-60 disabled:cursor-not-allowed"
         >
           この内容で送信する
         </button>
@@ -98,3 +103,34 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
     </div>
   </div>
 </section>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement | null;
+
+  if (form) {
+    const fields = form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea');
+
+    // アクセシビリティ: 検証エラー時に aria-invalid を付け、入力し直したら外す
+    fields.forEach((el) => {
+      el.addEventListener('invalid', () => el.setAttribute('aria-invalid', 'true'));
+      el.addEventListener('input', () => {
+        if (el.checkValidity()) el.removeAttribute('aria-invalid');
+      });
+    });
+
+    // 二重送信防止: 検証を通過して実際に送信される時だけボタンを無効化
+    form.addEventListener('submit', () => {
+      if (!submitBtn) return;
+      submitBtn.disabled = true;
+      submitBtn.setAttribute('aria-busy', 'true');
+      submitBtn.textContent = '送信中…';
+      // 送信が失敗して画面が遷移しなかった場合の保険（一定時間後に戻す）
+      window.setTimeout(() => {
+        submitBtn.disabled = false;
+        submitBtn.removeAttribute('aria-busy');
+        submitBtn.textContent = 'この内容で送信する';
+      }, 10000);
+    });
+  }
+</script>
