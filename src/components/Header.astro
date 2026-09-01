@@ -20,8 +20,8 @@ import logoMark from '../assets/images/logo-mark.png';
       </span>
     </a>
 
-    <!-- PCナビ（横1行に収まる幅=xl以上でのみ表示。それ未満はハンバーガー） -->
-    <nav class="hidden xl:block" aria-label="メインナビゲーション">
+    <!-- PCナビ（横1行に収まる幅=1152px以上で表示。それ未満はハンバーガー） -->
+    <nav class="hidden nav:block" aria-label="メインナビゲーション">
       <ul class="flex items-center gap-x-4 text-sm">
         {
           navItems.map((item) => (
@@ -52,7 +52,7 @@ import logoMark from '../assets/images/logo-mark.png';
       <button
         type="button"
         id="menu-toggle"
-        class="xl:hidden inline-flex items-center justify-center w-10 h-10 rounded text-green-deep"
+        class="nav:hidden inline-flex items-center justify-center w-10 h-10 rounded text-green-deep"
         aria-label="メニューを開く"
         aria-expanded="false"
         aria-controls="mobile-menu"
@@ -67,7 +67,7 @@ import logoMark from '../assets/images/logo-mark.png';
   <!-- モバイルメニュー -->
   <nav
     id="mobile-menu"
-    class="xl:hidden hidden border-t border-green-light/30 bg-base"
+    class="nav:hidden hidden border-t border-green-light/30 bg-base"
     aria-label="モバイルナビゲーション"
   >
     <ul class="px-4 py-2 divide-y divide-green-light/15">

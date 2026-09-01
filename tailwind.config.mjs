@@ -3,6 +3,10 @@ export default {
   content: ['./src/**/*.{astro,html,js,jsx,ts,tsx,vue,svelte,md,mdx}'],
   theme: {
     extend: {
+      screens: {
+        // ヘッダーのナビを横1行表示に切り替える幅（コンテンツ幅 max-w-6xl に合わせる）
+        nav: '1152px',
+      },
       colors: {
         // ブリーフ 1章のブランドカラー
         base: '#FBFAF6',        // 生成りの白
