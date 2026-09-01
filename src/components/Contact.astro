@@ -37,27 +37,30 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
         class="fade-in md:col-span-3 rounded-2xl bg-white ring-1 ring-green-light/20 p-6 space-y-4"
         action={formEndpoint}
         method="POST"
+        enctype="multipart/form-data"
       >
         {
           !formEndpoint && (
             <p class="rounded-lg bg-accent/10 text-accent text-sm p-3">
-              ※ 送信を有効にするには、.env の PUBLIC_FORMSPREE_ENDPOINT に Formspree のURLを設定してください。
+              ※ 送信を有効にするには、環境変数 PUBLIC_FORMSPREE_ENDPOINT にフォームのエンドポイントURLを設定してください。
             </p>
           )
         }
 
-        {/* ハニーポット: 人間には見えない罠フィールド。ボットが入力するとFormspreeが送信を破棄する */}
+        {/* ハニーポット: FormSubmit用の罠フィールド（_honey）。ボットが入力すると送信を破棄 */}
         <input
           type="text"
-          name="_gotcha"
+          name="_honey"
           tabindex="-1"
           autocomplete="off"
           aria-hidden="true"
           class="hidden"
         />
 
-        {/* 受信メールの件名（Formspree用） */}
+        {/* FormSubmit設定用の隠しフィールド */}
         <input type="hidden" name="_subject" value="【めいじ造園】お問い合わせフォームより" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
 
         <div>
           <label for="name" class="block text-sm font-bold text-ink/90">お名前 <span class="text-accent">必須</span></label>
@@ -114,6 +117,14 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
           <textarea id="message" name="message" rows="5" required maxlength="2000"
             placeholder="例：庭の松を1本、剪定をお願いしたいです。"
             class="mt-1 w-full rounded-lg border border-green-light/40 px-3 py-2.5 focus:border-green-deep outline-none aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-1 aria-[invalid=true]:ring-red-500"></textarea>
+        </div>
+
+        {/* 写真添付（FormSubmitはファイル名 attachment を添付する） */}
+        <div>
+          <label for="photo" class="block text-sm font-bold text-ink/90">写真添付（任意）</label>
+          <input id="photo" name="attachment" type="file" accept="image/*" multiple
+            class="mt-1 w-full text-sm text-ink/80 file:mr-3 file:rounded-full file:border-0 file:bg-green-light/15 file:px-4 file:py-2 file:text-green-deep file:font-bold" />
+          <p class="mt-1 text-xs text-ink/60">お庭の様子がわかる写真があると、お見積りがスムーズです。（テスト中）</p>
         </div>
 
 
@@ -197,34 +208,16 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
       }
     };
 
-    form.addEventListener('submit', async (e) => {
-      // 送信先(Formspree)が未設定なら通常送信に任せる
-      if (!form.getAttribute('action')) return;
-      // ここに到達する時点でブラウザの必須・形式チェックは通過済み
-      e.preventDefault();
+    // FormSubmit はファイル添付が AJAX 非対応のため、通常のPOST送信にする。
+    // ここでは二重送信防止のみ行い、送信はブラウザに任せる（FormSubmitの画面に遷移）。
+    form.addEventListener('submit', () => {
       errorMsg?.classList.add('hidden');
       setBusy(true);
-
-      try {
-        const res = await fetch(form.action, {
-          method: 'POST',
-          body: new FormData(form),
-          headers: { Accept: 'application/json' },
-        });
-        if (!res.ok) throw new Error(`status ${res.status}`);
-
-        // 成功: フォームを隠して完了メッセージを表示
-        form.classList.add('hidden');
-        if (successPanel) {
-          successPanel.classList.remove('hidden');
-          successPanel.focus();
-          successPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      } catch {
-        // 失敗: エラーメッセージを出してボタンを戻す
-        errorMsg?.classList.remove('hidden');
-        setBusy(false);
-      }
+      // 万一送信されず画面が遷移しなかった場合の保険
+      window.setTimeout(() => setBusy(false), 10000);
     });
   }
+
+  // successPanel はこのFormSubmit版では未使用（通常POSTでFormSubmit画面に遷移）
+  void successPanel;
 </script>
