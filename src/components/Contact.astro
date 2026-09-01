@@ -61,6 +61,8 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
         <input type="hidden" name="_subject" value="【めいじ造園】お問い合わせフォームより" />
         <input type="hidden" name="_template" value="table" />
         <input type="hidden" name="_captcha" value="false" />
+        {/* 送信後の戻り先。実際のURLはJSで現在のオリジンに合わせて設定する */}
+        <input type="hidden" name="_next" id="next-url" value="" />
 
         <div>
           <label for="name" class="block text-sm font-bold text-ink/90">お名前 <span class="text-accent">必須</span></label>
@@ -208,16 +210,26 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
       }
     };
 
-    // FormSubmit はファイル添付が AJAX 非対応のため、通常のPOST送信にする。
-    // ここでは二重送信防止のみ行い、送信はブラウザに任せる（FormSubmitの画面に遷移）。
+    // 送信後の戻り先を「現在のサイト＋?sent=1」に設定（本番・プレビュー両対応）
+    const nextInput = document.getElementById('next-url') as HTMLInputElement | null;
+    if (nextInput) nextInput.value = `${location.origin}/?sent=1#contact`;
+
+    // FormSubmit はファイル添付が AJAX 非対応のため通常POST送信。
+    // 二重送信防止のみ行い、送信はブラウザに任せる（FormSubmit経由で自サイトに戻る）。
     form.addEventListener('submit', () => {
       errorMsg?.classList.add('hidden');
       setBusy(true);
-      // 万一送信されず画面が遷移しなかった場合の保険
       window.setTimeout(() => setBusy(false), 10000);
     });
   }
 
-  // successPanel はこのFormSubmit版では未使用（通常POSTでFormSubmit画面に遷移）
-  void successPanel;
+  // FormSubmit送信後に ?sent=1 で自サイトへ戻ってきたら、完了メッセージを表示
+  if (new URLSearchParams(location.search).get('sent') === '1' && successPanel) {
+    form?.classList.add('hidden');
+    successPanel.classList.remove('hidden');
+    successPanel.focus();
+    successPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // URLから ?sent=1 を消して、再読み込み時に再表示されないようにする
+    history.replaceState(null, '', `${location.pathname}#contact`);
+  }
 </script>
