@@ -47,6 +47,19 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
           )
         }
 
+        {/* ハニーポット: 人間には見えない罠フィールド。ボットが入力するとFormspreeが送信を破棄する */}
+        <input
+          type="text"
+          name="_gotcha"
+          tabindex="-1"
+          autocomplete="off"
+          aria-hidden="true"
+          class="hidden"
+        />
+
+        {/* 受信メールの件名（Formspree用） */}
+        <input type="hidden" name="_subject" value="【めいじ造園】お問い合わせフォームより" />
+
         <div>
           <label for="name" class="block text-sm font-bold text-ink/90">お名前 <span class="text-accent">必須</span></label>
           <input id="name" name="name" type="text" required autocomplete="name" maxlength="50"
