@@ -5,7 +5,7 @@ import logoMark from '../assets/images/logo-mark.png';
 ---
 
 <header class="sticky top-0 z-40 bg-base/95 backdrop-blur border-b border-green-light/30">
-  <div class="mx-auto max-w-6xl px-4 h-16 md:h-20 flex items-center justify-between gap-4">
+  <div class="mx-auto max-w-6xl px-4 min-h-[4rem] md:min-h-[5rem] py-2 flex items-center justify-between gap-4">
     <a href="#top" class="flex items-center gap-2.5 shrink-0" aria-label="めいじ造園 トップへ">
       <Image
         src={logoMark}
@@ -21,8 +21,8 @@ import logoMark from '../assets/images/logo-mark.png';
     </a>
 
     <!-- PCナビ（横1行に収まる幅=1152px以上で表示。それ未満はハンバーガー） -->
-    <nav class="hidden nav:block" aria-label="メインナビゲーション">
-      <ul class="flex items-center gap-x-4 text-sm">
+    <nav class="hidden nav:block flex-1 min-w-0" aria-label="メインナビゲーション">
+      <ul class="flex flex-wrap items-center justify-end gap-x-4 gap-y-1 text-sm">
         {
           navItems.map((item) => (
             <li>
@@ -35,17 +35,17 @@ import logoMark from '../assets/images/logo-mark.png';
       </ul>
     </nav>
 
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2 shrink-0">
       <a
         href={site.telLink}
-        class="hidden sm:inline-flex items-center gap-2 rounded-full bg-accent text-white font-bold px-4 py-2 text-sm hover:brightness-110 transition"
+        class="hidden sm:inline-flex shrink-0 items-center gap-2 rounded-full bg-accent text-white font-bold px-4 py-2 text-sm hover:brightness-110 transition"
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="shrink-0"
           ><path
             d="M6.6 10.8a15.5 15.5 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11.4 11.4 0 003.6.58 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.4 11.4 0 00.58 3.6 1 1 0 01-.24 1z"
           ></path></svg
         >
-        <span class="text-center leading-tight">お電話は<br />こちら</span>
+        <span class="whitespace-nowrap text-center leading-tight">お電話は<br />こちら</span>
       </a>
 
       <!-- モバイル用メニュー開閉 -->
