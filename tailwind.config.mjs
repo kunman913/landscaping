@@ -5,7 +5,7 @@ export default {
     extend: {
       screens: {
         // ヘッダーのナビ表示に切り替える幅。これ未満はハンバーガー。
-        nav: '768px',
+        nav: '812px',
       },
       colors: {
         // ブリーフ 1章のブランドカラー
