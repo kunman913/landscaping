@@ -71,8 +71,8 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
         </div>
 
         <div>
-          <label for="tel" class="block text-sm font-bold text-ink/90">電話番号 <span class="text-accent">必須</span></label>
-          <input id="tel" name="tel" type="tel" required autocomplete="tel"
+          <label for="tel" class="block text-sm font-bold text-ink/90">電話番号 <span class="text-accent text-xs align-middle">いずれか必須</span></label>
+          <input id="tel" name="tel" type="tel" autocomplete="tel"
             inputmode="tel" pattern="[0-9\-]{10,20}" maxlength="20"
             placeholder="例：090-1234-5678"
             title="数字とハイフンで入力してください（例：090-1234-5678）"
@@ -80,10 +80,14 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
         </div>
 
         <div>
-          <label for="email" class="block text-sm font-bold text-ink/90">メールアドレス</label>
+          <label for="email" class="block text-sm font-bold text-ink/90">メールアドレス <span class="text-accent text-xs align-middle">いずれか必須</span></label>
           <input id="email" name="email" type="email" autocomplete="email" maxlength="254"
             placeholder="例：sample@example.com"
             class="mt-1 w-full rounded-lg border border-green-light/40 px-3 py-2.5 focus:border-green-deep outline-none aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-1 aria-[invalid=true]:ring-red-500" />
+          <p class="mt-1 text-xs text-ink/60">※ 電話番号かメールアドレスの、どちらか一方をご記入ください。</p>
+          <p id="contact-required-error" role="alert" class="hidden mt-1 text-sm font-bold text-red-600">
+            電話番号かメールアドレスの、どちらか一方をご記入ください。
+          </p>
         </div>
 
         <div>
@@ -182,9 +186,37 @@ const formEndpoint = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT ?? '';
     const nextInput = document.getElementById('next-url') as HTMLInputElement | null;
     if (nextInput) nextInput.value = `${location.origin}/?sent=1#contact`;
 
+    // 電話番号 または メールアドレスの、どちらか一方は必須
+    const telInput = document.getElementById('tel') as HTMLInputElement | null;
+    const emailInput = document.getElementById('email') as HTMLInputElement | null;
+    const contactReqError = document.getElementById('contact-required-error');
+    const hasContact = () =>
+      Boolean(telInput?.value.trim()) || Boolean(emailInput?.value.trim());
+
+    // どちらかを入力し始めたらエラー表示を消す
+    [telInput, emailInput].forEach((el) =>
+      el?.addEventListener('input', () => {
+        if (hasContact()) {
+          contactReqError?.classList.add('hidden');
+          telInput?.removeAttribute('aria-invalid');
+          emailInput?.removeAttribute('aria-invalid');
+        }
+      })
+    );
+
     // FormSubmit はファイル添付が AJAX 非対応のため通常POST送信。
     // 二重送信防止のみ行い、送信はブラウザに任せる（FormSubmit経由で自サイトに戻る）。
-    form.addEventListener('submit', () => {
+    form.addEventListener('submit', (e) => {
+      // 連絡先がどちらも空なら送信をブロック
+      if (!hasContact()) {
+        e.preventDefault();
+        contactReqError?.classList.remove('hidden');
+        telInput?.setAttribute('aria-invalid', 'true');
+        emailInput?.setAttribute('aria-invalid', 'true');
+        contactReqError?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        telInput?.focus();
+        return;
+      }
       errorMsg?.classList.add('hidden');
       setBusy(true);
       window.setTimeout(() => setBusy(false), 10000);
